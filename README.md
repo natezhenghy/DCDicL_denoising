@@ -23,7 +23,7 @@ Configure ```options/test_denoising.json```. Important settings:
 - path/root: path to save the tasks
 - path/pretrained_netG: path to the folder containing the pretrained models.
 - data/n_channels: 1 for greyscale and 3 for color.
-- test/visualize: true for saving the noisy input/pkredicted dictionaries.
+- test/visualize: true for saving the noisy input/predicted dictionaries.
 
 **Step 3**
 ```bash
