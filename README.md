@@ -62,7 +62,7 @@ Configure ```options/train_denoising.json```. Important settings:
 
 If you want to reload a pretrained model, pay attention to following settings:
 - path/pretrained_netG: path to the folder containing the pretrained models.
-- train/reload_compatible: if you want to load a pretrained 1-stage model into multi-stage model, please set this item to **true**.
+- train/reload_broadcast: if you want to load a pretrained 1-stage model into multi-stage model, please set this item to **true**.
 
 
 **Step 3**

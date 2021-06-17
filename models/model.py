@@ -1,3 +1,4 @@
+import copy
 from logging import Logger
 
 from models.network_denoising import DCDicL
@@ -65,6 +66,10 @@ class Model:
 
         state_dict_hypa = torch.load(load_path + 'hypa.pth')
         if self.opt['train']['reload_broadcast']:
+            state_dict_hypa_v2 = copy.deepcopy(state_dict_hypa)
+            for key in state_dict_hypa:
+                state_dict_hypa_v2[key.replace(
+                    '0.mlp', 'mlp')] = state_dict_hypa_v2.pop(key)
             for hypa in network.hypa_list:
                 hypa.load_state_dict(state_dict_hypa, strict=True)
         else:

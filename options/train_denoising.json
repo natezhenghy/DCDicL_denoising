@@ -47,7 +47,7 @@
   },
   "train": {
     "manual_seed": 0,
-    "reload_compatible": false,
+    "reload_broadcast": false,
     "G_optimizer_lr": 1e-4, // lr
     "G_scheduler_milestones": [ // milestones
       200000,
