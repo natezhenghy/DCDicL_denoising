@@ -1,6 +1,9 @@
+from logging import Logger
+
+from models.network_denoising import DCDicL
 import os
 from glob import glob
-from typing import Any, Dict, Union
+from typing import Any, Dict, List, Union
 
 import torch
 import torch.nn as nn
@@ -20,7 +23,7 @@ class Model:
         self.save_dir: str = opt['path']['models']
         self.device = torch.device(
             'cuda' if opt['gpu_ids'] is not None else 'cpu')
-        self.is_train = opt['is_train']  # training or not
+        self.is_train = opt['is_train']
         self.type = opt['netG']['type']
 
         self.net = select_network(opt).to(self.device)
@@ -46,10 +49,10 @@ class Model:
             print('Loading model for G [{:s}] ...'.format(load_path))
             self.load_network(load_path, self.net)
 
-    def load_network(self, load_path: str,
-                     network: Union[nn.DataParallel, nn.Module]):
+    def load_network(self, load_path: str, network: Union[nn.DataParallel,
+                                                          DCDicL]):
         if isinstance(network, nn.DataParallel):
-            network = network.module
+            network: DCDicL = network.module
 
         network.head.load_state_dict(torch.load(load_path + 'head.pth'),
                                      strict=True)
@@ -67,7 +70,7 @@ class Model:
         else:
             network.hypa_list.load_state_dict(state_dict_hypa, strict=True)
 
-    def save(self, logger):
+    def save(self, logger: Logger):
         logger.info('Saving the model.')
         net = self.net
         if isinstance(net, nn.DataParallel):
@@ -92,7 +95,7 @@ class Model:
 
     def define_optimizer(self):
         optim_params = []
-        for k, v in self.net.named_parameters():
+        for _, v in self.net.named_parameters():
             optim_params.append(v)
         self.optimizer = Adam(optim_params,
                               lr=self.opt_train['G_optimizer_lr'],
@@ -104,38 +107,23 @@ class Model:
                                      self.opt_train['G_scheduler_milestones'],
                                      self.opt_train['G_scheduler_gamma']))
 
-    def update_learning_rate(self, n):
+    def update_learning_rate(self, n: int):
         for scheduler in self.schedulers:
             scheduler.step(n)
 
     @property
-    def learning_rate(self):
+    def learning_rate(self) -> float:
         return self.schedulers[0].get_lr()[0]
 
-    def feed_data(self, data):
+    def feed_data(self, data: Dict[str, Any]):
         self.y = data['y'].to(self.device)
         self.y_gt = data['y_gt'].to(self.device)
-        if 'k_gt' in data:
-            self.k_gt = data['k_gt'].to(self.device)
+
         self.sigma = data['sigma'].to(self.device)
         self.path = data['path']
 
-    def optimize_parameters(self, current_step):
-        self.optimizer.zero_grad()
-        preds, ds = self.net(self.y, self.sigma)
-
-        dxs = [p[0] for p in preds]
-        loss = self.cal_multi_loss(dxs, self.y_gt)
-        self.log_dict['loss'] = loss.item()
-
-        self.dx = dxs[-1]
-        self.d = ds[-1]
-
-        loss.backward()
-
-        self.optimizer.step()
-
-    def cal_multi_loss(self, preds, gt):
+    def cal_multi_loss(self, preds: List[torch.Tensor],
+                       gt: torch.Tensor) -> torch.Tensor:
         losses = None
         for i, pred in enumerate(preds):
             loss = self.lossfn(pred, gt)
@@ -147,7 +135,7 @@ class Model:
                 losses += loss
         return losses
 
-    def log_train(self, current_step, epoch, logger):
+    def log_train(self, current_step: int, epoch: int, logger: Logger):
         message = f'Training epoch:{epoch:3d}, iter:{current_step:8,d}, lr:{self.learning_rate:.3e}'
         for k, v in self.log_dict.items(
         ):  # merge log information into message
@@ -189,9 +177,8 @@ class Model:
 
         return self.metrics['psnr'], self.metrics['ssim']
 
-    def save_visuals(self, tag):
+    def save_visuals(self, tag: str):
         y_img = self.out_dict['y']
-        y_gt_img = self.out_dict['y_gt']
         d_img = self.out_dict['d']
         dx_img = self.out_dict['dx']
         path = self.out_dict['path']
@@ -216,3 +203,16 @@ class Model:
             util.save_d(
                 d_img.mean(0).numpy(), img_path.replace('.png', '_d.png'))
             util.imsave(y_img, img_path.replace('.png', '_y.png'))
+
+    def train(self):
+        self.optimizer.zero_grad()
+        dxs, self.d = self.net(self.y, self.sigma)
+
+        # loss
+        loss = self.cal_multi_loss(dxs, self.y_gt)
+        self.log_dict['G_loss'] = loss.item()
+
+        self.dx = dxs[-1]
+        loss.backward()
+
+        self.optimizer.step()

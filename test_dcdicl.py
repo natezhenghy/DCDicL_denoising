@@ -8,7 +8,6 @@ from typing import Dict, List
 from prettytable import PrettyTable
 from torch.utils.data import DataLoader
 
-from data.dataset_ir import DatasetIR
 from data.select_dataset import select_dataset
 from models.model import Model
 from utils import utils_image as util
@@ -29,12 +28,14 @@ def main(config_path: str = 'options/test_denoising.json'):
 
     option.save(opt)
 
+    # logger
     logger_name = 'test'
     utils_logger.logger_info(
         logger_name, os.path.join(opt['path']['log'], logger_name + '.log'))
     logger = logging.getLogger(logger_name)
     logger.info(option.dict2str(opt))
 
+    # data
     opt_data_test = opt["data"]["test"]
     test_sets: List[DatasetDenoising] = select_dataset(opt_data_test, "test")
     test_loaders: List[DataLoader[DatasetDenoising]] = []
@@ -47,9 +48,11 @@ def main(config_path: str = 'options/test_denoising.json'):
                        drop_last=False,
                        pin_memory=True))
 
+    # model
     model = Model(opt)
     model.init()
 
+    # test
     avg_psnrs: Dict[str, List[float]] = {}
     avg_ssims: Dict[str, List[float]] = {}
     tags = []

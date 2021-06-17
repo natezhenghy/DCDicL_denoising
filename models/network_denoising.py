@@ -377,7 +377,7 @@ class DCDicL(nn.Module):
             dx = self.tail(x, d)
             dx = dx[..., :h, :w]
             pred = dx
-            preds.append((pred, ))
+            preds.append(pred)
 
         if self.training:
             return preds, d

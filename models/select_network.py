@@ -1,9 +1,11 @@
 import functools
+from typing import Any, Dict
+from torch import nn
 from torch.nn import init
 from models.network_denoising import DCDicL as DCDicL_denosing
 
 
-def select_network(opt):
+def select_network(opt: Dict[str, Any]):
     opt_net = opt['netG']
 
     if opt_net['type'] == 'denoising':
@@ -27,10 +29,10 @@ def select_network(opt):
     return netG
 
 
-def init_weights(net,
-                 init_type='xavier_uniform',
-                 init_bn_type='uniform',
-                 gain=1):
+def init_weights(net: nn.Module,
+                 init_type: str='xavier_uniform',
+                 init_bn_type: str='uniform',
+                 gain: float=1):
     """
     # Kai Zhang, https://github.com/cszn/KAIR
     #
@@ -46,7 +48,7 @@ def init_weights(net,
     print('Initialization method [{:s} + {:s}], gain is [{:.2f}]'.format(
         init_type, init_bn_type, gain))
 
-    def init_fn(m, init_type='xavier_uniform', init_bn_type='uniform', gain=1):
+    def init_fn(m: nn.Module, init_type: str='xavier_uniform', init_bn_type: str='uniform', gain: float=1):
         classname = m.__class__.__name__
 
         if classname.find('Linear') != -1:
