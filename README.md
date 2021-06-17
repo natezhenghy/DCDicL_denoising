@@ -20,7 +20,7 @@ The implementation of DCDicL is based on the awesome Image Restoration Toolbox [
 
 Configure ```options/test_denoising.json```. Important settings:
 - task: task name.
-- path/root: path to save the tasks
+- path/root: path to save the tasks.
 - path/pretrained_netG: path to the folder containing the pretrained models.
 - data/n_channels: 1 for greyscale and 3 for color.
 - test/visualize: true for saving the noisy input/predicted dictionaries.
@@ -33,4 +33,44 @@ python test_dcdicl.py
 
 
 ## Training
-Training code will be released soon.
+**Step 1**
+
+Prepare training/testing data. The folder structure should be similar to:
+
+```
++-- data
+|   +-- train
+|       +-- training_dataset_1
+|       +-- training_dataset_2
+|   +-- test
+|       +-- testing_dataset_1
+|       +-- testing_dataset_2
+```
+
+**Step 2**
+
+Configure ```options/train_denoising.json```. Important settings:
+- task: task name.
+- path/root: path to save the tasks.
+- data/n_channels: 1 for greyscale and 3 for color.
+- data/train/sigma: range of noise levels.
+- netG/d_size: dictionary size.
+- netG/n_iter: number of iterations.
+- netG/nc_x: number of channels in NetX.
+- netG/nb: number of blocks in NetX.
+- test/visualize: true for saving the noisy input/predicted dictionaries.
+
+If you want to reload a pretrained model, pay attention to following settings:
+- path/pretrained_netG: path to the folder containing the pretrained models.
+- train/reload_compatible: if you want to load a pretrained 1-stage model into multi-stage model, please set this item to **true**.
+
+
+**Step 3**
+```bash
+python train_dcdicl.py
+```
+
+**FAQ**
+- Keep receiving ''WARNING batched routines are designed for mall sizes. It might be ...''.
+
+This is the limitation of the backend linear algebra GPU accelerated libraries of PyTorch. The only way to get rid of it is to reduce the number of channels or spatial size of the dictionaries.

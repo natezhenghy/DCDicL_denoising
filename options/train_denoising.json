@@ -34,8 +34,7 @@
     }
   },
   "netG": {
-    "d_size": 5, // dictionary size
-    "fix_d": false,
+    "d_size": 3, // dictionary size
     "n_iter": 2, // stages
     "in_nc": 1, // image channel
     "nc_x": [
