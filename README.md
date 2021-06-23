@@ -76,7 +76,7 @@ python train_dcdicl.py
 This is the limitation of the backend linear algebra GPU accelerated libraries of PyTorch. The only way to get rid of it is to reduce the number of channels or spatial size of the dictionaries.
 
 ## Citation
-'''
+```
 @InProceedings{Zheng_2021_CVPR,
     author    = {Zheng, Hongyi and Yong, Hongwei and Zhang, Lei},
     title     = {Deep Convolutional Dictionary Learning for Image Denoising},
@@ -85,4 +85,4 @@ This is the limitation of the backend linear algebra GPU accelerated libraries o
     year      = {2021},
     pages     = {630-641}
 }
-'''
+```
