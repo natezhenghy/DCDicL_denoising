@@ -74,3 +74,15 @@ python train_dcdicl.py
 - Keep receiving ''WARNING batched routines are designed for mall sizes. It might be ...''.
 
 This is the limitation of the backend linear algebra GPU accelerated libraries of PyTorch. The only way to get rid of it is to reduce the number of channels or spatial size of the dictionaries.
+
+## Citation
+'''
+@InProceedings{Zheng_2021_CVPR,
+    author    = {Zheng, Hongyi and Yong, Hongwei and Zhang, Lei},
+    title     = {Deep Convolutional Dictionary Learning for Image Denoising},
+    booktitle = {Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition (CVPR)},
+    month     = {June},
+    year      = {2021},
+    pages     = {630-641}
+}
+'''
