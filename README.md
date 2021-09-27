@@ -1,4 +1,4 @@
-# DCDicL for Image Denoising
+# Deep Convolutional Dictionary Learning for Image Denoising
 Hongyi Zheng*, Hongwei Yong*, Lei Zhang, "Deep Convolutional Dictionary Learning for Image Denoising," in CVPR 2021. (* Equal contribution)
 
 [[paper]](https://www4.comp.polyu.edu.hk/~cslzhang/paper/DCDicL-cvpr21-final.pdf) [[supp]](https://www4.comp.polyu.edu.hk/~cslzhang/paper/DCDicL-cvpr21-supp.pdf)
@@ -13,7 +13,7 @@ The implementation of DCDicL is based on the awesome Image Restoration Toolbox [
 ## Testing
 **Step 1**
 
-- Download pretrained models from [[OneDrive]](https://1drv.ms/u/s!ApI9l49EgrUbjJ8cmYU4XBFUPutmag?e=AUEgnb).
+- Download pretrained models from [[OneDrive]](https://1drv.ms/u/s!ApI9l49EgrUbjJ8cmYU4XBFUPutmag?e=AUEgnb) or [[BaiduPan]](https://pan.baidu.com/share/init?surl=vIqN2XiZ9UH8vcUpZPbXnw) (password: flfw).
 - Unzip downloaded file and put the folders into ```./release/denoising```
 
 **Step 2**
@@ -74,3 +74,15 @@ python train_dcdicl.py
 - Keep receiving ''WARNING batched routines are designed for mall sizes. It might be ...''.
 
 This is the limitation of the backend linear algebra GPU accelerated libraries of PyTorch. The only way to get rid of it is to reduce the number of channels or spatial size of the dictionaries.
+
+## Citation
+```
+@InProceedings{Zheng_2021_CVPR,
+    author    = {Zheng, Hongyi and Yong, Hongwei and Zhang, Lei},
+    title     = {Deep Convolutional Dictionary Learning for Image Denoising},
+    booktitle = {Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition (CVPR)},
+    month     = {June},
+    year      = {2021},
+    pages     = {630-641}
+}
+```
