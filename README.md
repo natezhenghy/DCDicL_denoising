@@ -34,7 +34,9 @@ python test_dcdicl.py
 
 ## Training
 
-If you want to achieve the best performance, you have to first train a 1-stage model, then train a multi-stage (2~6) model based on the pretrained model. (Please refer the paper for more details.)
+If you want to achieve the best performance:
+- you have to first train a 1-stage model, then train a multi-stage (2~6) model based on the pretrained model. (Please refer the paper for more details.)
+- you have to include [[Waterloo Exploration Database]](https://ece.uwaterloo.ca/~k29ma/exploration/) in the training sets.
 
 **Step 1**
 
