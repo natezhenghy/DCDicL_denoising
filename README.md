@@ -13,7 +13,7 @@ The implementation of DCDicL is based on the awesome Image Restoration Toolbox [
 ## Testing
 **Step 1**
 
-- Download pretrained models from [[OneDrive]](https://1drv.ms/f/c/1bb582448f973d92/EpI9l49EgrUggBuldQQAAAABPClJ7aui_p_TDOert_jDFg?e=Bulcc5) or [[BaiduPan]](https://pan.baidu.com/share/init?surl=vIqN2XiZ9UH8vcUpZPbXnw) (password: flfw).
+- Download pretrained models from [[OneDrive]](https://1drv.ms/u/c/1bb582448f973d92/EZTo0uKvydxIocrcLiic94sBB-3E1uBUoAa3jCXkgeRBMA?e=SpQGc1) or [[BaiduPan]](https://pan.baidu.com/share/init?surl=vIqN2XiZ9UH8vcUpZPbXnw) (password: flfw).
 - Unzip downloaded file and put the folders into ```./release/denoising```
 
 **Step 2**
